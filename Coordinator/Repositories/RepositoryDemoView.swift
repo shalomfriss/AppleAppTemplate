@@ -14,11 +14,9 @@ struct RepositoryDemoView: View {
                 VStack(alignment: .leading) {
                     Text(item.title)
                         .font(.headline)
-                    if let details = item.details {
-                        Text(details)
+                        Text(item.url)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                    }
                 }
             }
             .navigationTitle("Items")
@@ -47,11 +45,11 @@ struct RepositoryDemoView: View {
                         }
                         Spacer()
                         Button("Add") {
-                            let detailsValue = newItemDetails.isEmpty ? nil : newItemDetails
-                            vm.addItem(title: newItemTitle, details: detailsValue)
-                            showAddItemSheet = false
-                            newItemTitle = ""
-                            newItemDetails = ""
+//                            let detailsValue = newItemDetails.isEmpty ? nil : newItemDetails
+//                            vm.addItem(title: newItemTitle, url: item.url, albumId: <#Int#>)
+//                            showAddItemSheet = false
+//                            newItemTitle = ""
+//                            newItemDetails = ""
                         }
                         .disabled(newItemTitle.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
@@ -95,9 +93,9 @@ extension RepositoryDemoView {
         }
 
         @MainActor
-        func addItem(title: String, details: String?) {
+        func addItem(id: String, title: String, url: String, thumbnailUrl: String, albumId: Int) {
             guard let repository = repository else { return }
-            let newItem = Item(title: title, details: details)
+            let newItem = Item(id: -1, title: title, url: url, thumbnailUrl: thumbnailUrl, albumId: albumId)
             Task {
                 do {
                     if let local = (repository as? DefaultItemRepository)?.local as? SwiftDataLocalStore {

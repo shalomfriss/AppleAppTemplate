@@ -1,5 +1,11 @@
 import Foundation
 
+// Optional fields some ItemDTO variants may provide.
+private protocol ItemDTOWithOptionalFields {
+    var thumbnailUrl: String? { get }
+    var albumId: Int? { get }
+}
+
 protocol ItemRepository {
     /// Returns the source-of-truth list of items.
     /// This will consult the local store first and fall back to network if needed.
@@ -41,7 +47,16 @@ final class DefaultItemRepository: ItemRepository {
         }
 
         // 3. Convert DTOs -> Items and persist locally
-        let items = dtos.map { Item(id: $0.id, title: $0.title, details: $0.details) }
+        let items = dtos.map { dto in
+            Item(
+                id: dto.id,
+                title: dto.title,
+                url: dto.url,
+                // Prefer strongly-typed properties if available on ItemDTO; provide sensible fallbacks otherwise.
+                thumbnailUrl: (dto as? ItemDTOWithOptionalFields)?.thumbnailUrl ?? dto.url,
+                albumId: (dto as? ItemDTOWithOptionalFields)?.albumId ?? -1
+            )
+        }
         try await local.saveItems(items)
 
         return items
@@ -68,6 +83,11 @@ extension DefaultItemRepository {
     }
 }
 
+#if canImport(Foundation)
+// If your ItemDTO type already has these properties, you can conform it to this protocol in its own file.
+// This empty extension is intentionally left without conformance to avoid accidental coupling.
+#endif
+
 // MARK: - Actor-aware NetworkClient factory
 
 #if canImport(Foundation)
@@ -79,3 +99,4 @@ private func _makeNetworkClientOnActor() async -> NetworkClient {
     return NetworkClient()
 }
 #endif
+

@@ -31,5 +31,5 @@ struct CoordinatorApp: App {
 }
 
 enum Constants: String {
-    case itemsURL = ""
+    case itemsURL = "https://jsonplaceholder.typicode.com/photos"
 }

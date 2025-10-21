@@ -1,7 +1,7 @@
 import Foundation
 
 struct ItemDTO: Codable {
-    let id: UUID
+    let albumId, id: Int
     let title: String
-    let details: String?
+    let url, thumbnailUrl: String
 }

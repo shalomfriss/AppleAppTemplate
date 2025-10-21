@@ -34,9 +34,9 @@ final class SwiftDataLocalStore: LocalStore {
             let existing = try context.fetch(request)
             if let found = existing.first {
                 found.title = item.title
-                found.details = item.details
+                found.url = item.url
             } else {
-                _ = Item(id: item.id, title: item.title, details: item.details)
+                _ = Item(id: item.id, title: item.title, url: item.url, thumbnailUrl: item.thumbnailUrl, albumId: item.albumId)
             }
         }
         try context.save()

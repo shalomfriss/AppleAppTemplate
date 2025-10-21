@@ -3,13 +3,17 @@ import SwiftData
 
 @Model
 final class Item: Identifiable {
-    @Attribute(.unique) var id: UUID
+    var albumId: Int
+    @Attribute(.unique) var id: Int
     var title: String
-    var details: String?
-
-    init(id: UUID = UUID(), title: String, details: String? = nil) {
+    var url: String
+    var thumbnailUrl: String
+    
+    init(id: Int, title: String, url: String, thumbnailUrl: String, albumId: Int) {
         self.id = id
         self.title = title
-        self.details = details
+        self.url = url
+        self.thumbnailUrl = thumbnailUrl
+        self.albumId = albumId
     }
 }
