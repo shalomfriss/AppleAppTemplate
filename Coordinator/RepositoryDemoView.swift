@@ -80,7 +80,7 @@ extension RepositoryDemoView {
 
         func configure(container: ModelContainer, itemsURL: String) {
             let local = SwiftDataLocalStore(container: container)
-            self.repository = DefaultItemRepository(local: local, network: NetworkClient(), itemsURL: itemsURL)
+            self.repository = ItemRepository(local: local, network: NetworkClient(), itemsURL: itemsURL)
         }
         
         func load() async {
@@ -98,7 +98,7 @@ extension RepositoryDemoView {
             let newItem = Item(id: -1, title: title, url: url, thumbnailUrl: thumbnailUrl, albumId: albumId)
             Task {
                 do {
-                    if let local = (repository as? DefaultItemRepository)?.local as? SwiftDataLocalStore {
+                    if let local = (repository as? ItemRepository)?.local as? SwiftDataLocalStore {
                         try await local.saveItems([newItem])
                         await load()
                     }

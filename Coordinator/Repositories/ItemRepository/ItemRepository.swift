@@ -6,13 +6,13 @@ private protocol ItemDTOWithOptionalFields {
     var albumId: Int? { get }
 }
 
-protocol ItemRepository {
+protocol ItemRepositoryProtocol {
     /// Returns the source-of-truth list of items.
     /// This will consult the local store first and fall back to network if needed.
     func getItems(_ forceNetworkFetch: Bool?) async throws -> [Item]
 }
 
-final class DefaultItemRepository: ItemRepository {
+final class ItemRepository: ItemRepositoryProtocol {
     public let local: LocalStore
     private let network: NetworkClient
     private let itemsURL: String
@@ -52,9 +52,8 @@ final class DefaultItemRepository: ItemRepository {
                 id: dto.id,
                 title: dto.title,
                 url: dto.url,
-                // Prefer strongly-typed properties if available on ItemDTO; provide sensible fallbacks otherwise.
-                thumbnailUrl: (dto as? ItemDTOWithOptionalFields)?.thumbnailUrl ?? dto.url,
-                albumId: (dto as? ItemDTOWithOptionalFields)?.albumId ?? -1
+                thumbnailUrl: dto.thumbnailUrl,
+                albumId: dto.albumId
             )
         }
         try await local.saveItems(items)
@@ -63,15 +62,15 @@ final class DefaultItemRepository: ItemRepository {
     }
 }
 
-extension DefaultItemRepository {
+extension ItemRepository {
     /// Convenience factory to create a repository while respecting the NetworkClient's actor isolation.
     /// Usage: `let repo = await DefaultItemRepository.make(local: local, itemsURL: url)`
-    static func make(local: LocalStore, itemsURL: String) async -> DefaultItemRepository {
+    static func make(local: LocalStore, itemsURL: String) async -> ItemRepository {
         // Construct the NetworkClient on its required actor if it declares one.
         // If NetworkClient is annotated with a global actor (e.g., @NetworkActor), this `await` ensures
         // we hop to that actor before initialization. If not, the await is a harmless suspension point.
-        let client = await DefaultItemRepository.makeNetworkClient()
-        return DefaultItemRepository(local: local, network: client, itemsURL: itemsURL)
+        let client = await ItemRepository.makeNetworkClient()
+        return ItemRepository(local: local, network: client, itemsURL: itemsURL)
     }
 
     /// Helper that initializes NetworkClient on its actor if needed.
