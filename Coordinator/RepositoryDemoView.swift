@@ -11,13 +11,7 @@ struct RepositoryDemoView: View {
     var body: some View {
         NavigationStack {
             List(vm.items, id: \.id) { item in
-                VStack(alignment: .leading) {
-                    Text(item.title)
-                        .font(.headline)
-                        Text(item.url)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                }
+                SimpeRow(title: item.title, description: item.url)
             }
             .navigationTitle("Items")
             .toolbar {
@@ -62,7 +56,7 @@ struct RepositoryDemoView: View {
             }
         }
         .task {
-            vm.configure(container: modelContainer, itemsURL: Constants.itemsURL.rawValue)
+            vm.configure(container: modelContainer, itemsURL: UrlEndpoints.itemsURL.rawValue)
         }
     }
 }

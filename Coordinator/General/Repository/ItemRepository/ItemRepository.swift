@@ -42,6 +42,7 @@ final class ItemRepository: ItemRepositoryProtocol {
         let dtos: [ItemDTO]
         do {
             dtos = try await network.fetchItems(from: itemsURL)
+//            dtos = try await network.fetch([ItemDTO].self, from: itemsURL)
         } catch {
             throw error
         }

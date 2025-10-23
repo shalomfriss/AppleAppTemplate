@@ -5,6 +5,7 @@ actor NetworkActor {
     static let shared: some Actor = NetworkActor()
 }
 
+// MARK: - Base
 final class NetworkClient {
     private let session: URLSession
 
@@ -39,10 +40,12 @@ final class NetworkClient {
             throw NetworkError.decodingError(error)
         }
     }
+}
 
+// MARK: - Items
+extension NetworkClient {
     // Example: fetch list of ItemDTO from a given endpoint
     func fetchItems(from urlString: String) async throws -> [ItemDTO] {
         try await fetch([ItemDTO].self, from: urlString)
     }
 }
-
