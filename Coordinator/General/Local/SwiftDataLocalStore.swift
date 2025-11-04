@@ -2,12 +2,12 @@ import Foundation
 import SwiftData
 
 
-protocol LocalStore {
+protocol SwiftDataLocalStoreProtocol {
     @MainActor func fetchItems() async throws -> [Item]
     @MainActor func saveItems(_ items: [Item]) async throws
 }
 
-final class SwiftDataLocalStore: LocalStore {
+final class SwiftDataLocalStore: SwiftDataLocalStoreProtocol {
     private let container: ModelContainer
 
     init(container: ModelContainer) {
