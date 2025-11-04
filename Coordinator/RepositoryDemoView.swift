@@ -40,7 +40,7 @@ struct RepositoryDemoView: View {
                         Spacer()
                         Button("Add") {
 //                            let detailsValue = newItemDetails.isEmpty ? nil : newItemDetails
-//                            vm.addItem(title: newItemTitle, url: item.url, albumId: <#Int#>)
+                            vm.addItem(id: UUID().uuidString, title: newItemTitle, url: "https://via.placeholder.com/600/92c952", thumbnailUrl: "https://via.placeholder.com/150/92c952", albumId: 1)
 //                            showAddItemSheet = false
 //                            newItemTitle = ""
 //                            newItemDetails = ""
@@ -92,7 +92,7 @@ extension RepositoryDemoView {
             let newItem = Item(id: -1, title: title, url: url, thumbnailUrl: thumbnailUrl, albumId: albumId)
             Task {
                 do {
-                    if let local = (repository as? ItemRepository)?.local as? SwiftDataLocalStore {
+                    if let local = repository.local as? SwiftDataLocalStore {
                         try await local.saveItems([newItem])
                         await load()
                     }
