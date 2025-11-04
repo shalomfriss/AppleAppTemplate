@@ -3,7 +3,8 @@ import SwiftData
 
 struct RepositoryDemoView: View {
     let modelContainer: ModelContainer
-    @StateObject private var vm = DemoViewModel()
+    @StateObject private var vm = RepositoryDemoViewModel()
+    
     @State private var showAddItemSheet = false
     @State private var newItemTitle = ""
     @State private var newItemDetails = ""
@@ -19,7 +20,7 @@ struct RepositoryDemoView: View {
                     Button(action: {
                         showAddItemSheet = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus")		
                     }
                 }
             }

@@ -13,11 +13,11 @@ protocol ItemRepositoryProtocol {
 }
 
 final class ItemRepository: ItemRepositoryProtocol {
-    public let local: LocalStore
+    public let local: SwiftDataLocalStoreProtocol
     private let network: NetworkClient
     private let itemsURL: String
 
-    init(local: LocalStore, network: NetworkClient, itemsURL: String) {
+    init(local: SwiftDataLocalStoreProtocol, network: NetworkClient, itemsURL: String) {
         self.local = local
         self.network = network
         self.itemsURL = itemsURL
